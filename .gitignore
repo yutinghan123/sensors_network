@@ -8,6 +8,9 @@ MDK-ARM/*.*
 !MDK-ARM/sensor_network.uvprojx
 !MDK-ARM/startup_stm32f103xe.s
 
+# Temporary files
+textbuf.txt
+
 # Prerequisites
 *.d
 
