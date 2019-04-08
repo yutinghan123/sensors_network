@@ -410,11 +410,6 @@
               <FileType>1</FileType>
               <FilePath>..\Src\uds.c</FilePath>
             </File>
-            <File>
-              <FileName>sensor.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Src\sensor.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
