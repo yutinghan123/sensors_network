@@ -1,6 +1,7 @@
 #ifndef __SENSOR_H
 #define __SENSOR_H
 #define MODBUS_TIMEOUT 100 //ModBus等待响应超时时间（ms），即发出ModBus命令后，等待接收方响应的时间，超出此时间认为失去响应
+#define POLLING_PERIOD 10		//巡检周期（s）
 typedef enum
 {
 	SEN_TEMP_HUMI = 0,	//土壤温湿度传感器

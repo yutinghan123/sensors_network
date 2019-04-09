@@ -68,6 +68,9 @@
 
 /* Private variables ---------------------------------------------------------*/
 uint32_t lasttick, curtick;
+uint32_t lastptime = 0;//上一次巡检时间
+CircleQue_TypeDef qbuf1, qbuf2;
+PtrQue_TypeDef sens_que;
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 __IO ITStatus Uart1TxCplt = RESET;
@@ -110,7 +113,6 @@ int main(void)
 {
 	
   /* USER CODE BEGIN 1 */
-	CircleQue_TypeDef qbuf1, qbuf2;
 	uint8_t b;
 	FunctionalState rs485_tx = DISABLE;
   /* USER CODE END 1 */
@@ -159,55 +161,19 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-		if (Uart1RxCplt == SET) //串口1收到数据
-		{
-			Uart1RxCplt = RESET;
-			Que_In(&qbuf1, aRx1Buffer[0]);//入队
-			//向串口1下达继续接受下一个字节的任务
-			while (HAL_UART_Receive_IT(&huart1, (uint8_t*)aRx1Buffer, 1)!= HAL_OK);//下达接收任务必须成功，否则不能再收到后续数据
-		}
-		if (rs485_tx == DISABLE && Que_Query(&qbuf1, &b)) //rs485处于接收状态，并且串口数据缓冲区内有数据
-		{
-			if ((__QUE_COUNT(&qbuf1) >= 2) || (HAL_GetTick() - rx1_lastbyte_time >= RX_INTERVAL))
-			{//如果缓冲区队列qubf1_2的数据超过2个，或者数据存放的时间超过RX_INTERVAL，把485接口设置为发送状态
-				RS485_TX_EN();//485转换芯片设置为发送模式
-				rs485_tx = ENABLE;//485状态变量设置为发送
-			}
-		}
-		if (rs485_tx == ENABLE)
-		{
-			if ( Que_Query(&qbuf1, &b))//检查缓冲区队列是否有数据
-			{
-				aTx2Buffer[0] = b;
-				if(HAL_UART_Transmit_IT(&huart2, (uint8_t*)aTx2Buffer, 1) == HAL_OK)
-				{
-					Que_Out(&qbuf1, &b);//发送任务下达成功，从队列里删除队头，避免下次重复发送
-					Uart2TxCplt = RESET;//清除发送完成状态
-				}
-			}
-			else
-			{//如果缓冲区没有可发送的数据，并且最后一个数据已经发送结束，485接口设置为接收状态
-				if (Uart2TxCplt == SET)
-				{
-					RS485_RX_EN();//缓冲区队列无数据，将RS485设置为接收状态
-					rs485_tx = DISABLE;
-					Uart2TxCplt = RESET;//清除发送完成状态
-				}
-			}
-		}
-		if (Uart2RxCplt == SET) 
-		{
-			Uart2RxCplt = RESET;
-			Que_In(&qbuf2, aRx2Buffer[0]);
-			while (HAL_UART_Receive_IT(&huart2, (uint8_t*)aRx2Buffer, 1)!= HAL_OK);//下达接收任务必须成功，否则不能再收到后续数据
-		}
-		if (Que_Query(&qbuf2, &b))//检查缓冲区队列是否有数据
+		if (Que_Query(&qbuf1, &b))//检查缓冲区队列是否有数据，有则回送
 		{
 			aTx1Buffer[0] = b;
 			if(HAL_UART_Transmit_IT(&huart1, (uint8_t*)aTx1Buffer, 1) == HAL_OK)
 			{
-				Que_Out(&qbuf2, &b);//发送任务下达成功，从队列里删除队头，避免下次重复发送
+				Que_Out(&qbuf1, &b);//发送任务下达成功，从队列里删除队头，避免下次重复发送
 			}
+		}
+		if ((HAL_GetTick() - lastptime + 0x100000000) % 0x100000000 >= POLLING_PERIOD * 1000)
+		{
+			LED0_ON();
+			Sensors_Polling(&sens_que);
+			LED0_OFF();
 		}
 		if ( (curtick = HAL_GetTick()) - lasttick >= RUNNING_BLINK_INTERVAL) 
 		{
@@ -411,8 +377,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
   /* Set transmission flag: transfer complete */
 	if (UartHandle->Instance == USART1)
 	{
-		Uart1RxCplt = SET;
-		rx1_lastbyte_time = HAL_GetTick();
+		Que_In(&qbuf1, aRx1Buffer[0]);//入队
+		HAL_UART_Receive_IT(&huart1, (uint8_t*)aRx1Buffer, 1);
 	}
 	if (UartHandle->Instance == USART2)
 	{
