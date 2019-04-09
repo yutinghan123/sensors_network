@@ -52,6 +52,7 @@ extern "C" {
 #include "comm_def.h"
 #include "uds.h"
 #include "sensor.h"
+#include "led.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 

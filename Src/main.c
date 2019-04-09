@@ -211,7 +211,7 @@ int main(void)
 		}
 		if ( (curtick = HAL_GetTick()) - lasttick >= RUNNING_BLINK_INTERVAL) 
 		{
-			HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_5);
+			LED1_TOGGLE();
 			lasttick = curtick;
 		}
     /* USER CODE BEGIN 3 */
