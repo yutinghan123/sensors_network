@@ -415,6 +415,11 @@
               <FileType>1</FileType>
               <FilePath>..\Src\sensor.c</FilePath>
             </File>
+            <File>
+              <FileName>comm_def.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\comm_def.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

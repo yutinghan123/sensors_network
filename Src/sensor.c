@@ -44,6 +44,7 @@ void Sensors_Que_Init(PtrQue_TypeDef * sq)
 	Sensor_Handle_t * sh;
 	ModBus_Cmd_Union_t * mbcmd;
 	ModBus_Resp_Union_t * mbresp;
+	uint16_t mb_crc;
 	int i;
 	for (i = 0; i < PTRQUESIZE; i++) //初始化传感器队列，并完成传感器句柄部分初始化
 	{
@@ -62,8 +63,9 @@ void Sensors_Que_Init(PtrQue_TypeDef * sq)
 		sh->modbus_cmd->cmd.funcode = 0x03;
 		sh->modbus_cmd->cmd.regaddr = 0x0000;
 		sh->modbus_cmd->cmd.regcount = 0x0004;
-		sh->modbus_cmd->cmd.crcl = 0x00;
-		sh->modbus_cmd->cmd.crch = 0x00;
+		mb_crc = crc16_calc(sh->modbus_cmd->cmdbytes, sh->mb_cmdsize - 2);
+		sh->modbus_cmd->cmd.crcl = (uint8_t)mb_crc;
+		sh->modbus_cmd->cmd.crch = (uint8_t)(mb_crc >> 8);
 		sh->mb_respsize = sizeof(ModBus_Resp_IHT_t);
 	}
 	if (PtrQue_Query(sq, (void **)&sh)) //对传感器队列中的CO2温湿度传感器继续完成初始化
@@ -74,8 +76,9 @@ void Sensors_Que_Init(PtrQue_TypeDef * sq)
 		sh->modbus_cmd->cmd.funcode = 0x03;
 		sh->modbus_cmd->cmd.regaddr = 0x0000;
 		sh->modbus_cmd->cmd.regcount = 0x0003;
-		sh->modbus_cmd->cmd.crcl = 0x00;
-		sh->modbus_cmd->cmd.crch = 0x00;
+		mb_crc = crc16_calc(sh->modbus_cmd->cmdbytes, sh->mb_cmdsize - 2);
+		sh->modbus_cmd->cmd.crcl = (uint8_t)mb_crc;
+		sh->modbus_cmd->cmd.crch = (uint8_t)(mb_crc >> 8);
 		sh->mb_respsize = sizeof(ModBus_Resp_CO2HT_t);
 	}
 	if (PtrQue_Query(sq, (void **)&sh)) //对传感器队列中的土壤温湿度传感器继续完成初始化
@@ -86,8 +89,9 @@ void Sensors_Que_Init(PtrQue_TypeDef * sq)
 		sh->modbus_cmd->cmd.funcode = 0x03;
 		sh->modbus_cmd->cmd.regaddr = 0x0000;
 		sh->modbus_cmd->cmd.regcount = 0x0002;
-		sh->modbus_cmd->cmd.crcl = 0x00;
-		sh->modbus_cmd->cmd.crch = 0x00;
+		mb_crc = crc16_calc(sh->modbus_cmd->cmdbytes, sh->mb_cmdsize - 2);
+		sh->modbus_cmd->cmd.crcl = (uint8_t)mb_crc;
+		sh->modbus_cmd->cmd.crch = (uint8_t)(mb_crc >> 8);
 		sh->mb_respsize = sizeof(ModBus_Resp_HT_t);
 	}
 	if (PtrQue_Query(sq, (void **)&sh)) //对传感器队列中的土壤温湿度传感器继续完成初始化
@@ -98,8 +102,9 @@ void Sensors_Que_Init(PtrQue_TypeDef * sq)
 		sh->modbus_cmd->cmd.funcode = 0x03;
 		sh->modbus_cmd->cmd.regaddr = 0x0000;
 		sh->modbus_cmd->cmd.regcount = 0x0002;
-		sh->modbus_cmd->cmd.crcl = 0x00;
-		sh->modbus_cmd->cmd.crch = 0x00;
+		mb_crc = crc16_calc(sh->modbus_cmd->cmdbytes, sh->mb_cmdsize - 2);
+		sh->modbus_cmd->cmd.crcl = (uint8_t)mb_crc;
+		sh->modbus_cmd->cmd.crch = (uint8_t)(mb_crc >> 8);
 		sh->mb_respsize = sizeof(ModBus_Resp_HT_t);
 	}
 	if (PtrQue_Query(sq, (void **)&sh)) //对传感器队列中的土壤温湿度传感器继续完成初始化
@@ -110,8 +115,9 @@ void Sensors_Que_Init(PtrQue_TypeDef * sq)
 		sh->modbus_cmd->cmd.funcode = 0x03;
 		sh->modbus_cmd->cmd.regaddr = 0x0000;
 		sh->modbus_cmd->cmd.regcount = 0x0002;
-		sh->modbus_cmd->cmd.crcl = 0x00;
-		sh->modbus_cmd->cmd.crch = 0x00;
+		mb_crc = crc16_calc(sh->modbus_cmd->cmdbytes, sh->mb_cmdsize - 2);
+		sh->modbus_cmd->cmd.crcl = (uint8_t)mb_crc;
+		sh->modbus_cmd->cmd.crch = (uint8_t)(mb_crc >> 8);
 		sh->mb_respsize = sizeof(ModBus_Resp_HT_t);
 	}
 	if (PtrQue_Query(sq, (void **)&sh)) //对传感器队列中的电导率盐分传感器继续完成初始化
@@ -123,8 +129,9 @@ void Sensors_Que_Init(PtrQue_TypeDef * sq)
 		sh->modbus_cmd->cmd_ext.datasize = 0x04;
 		sh->modbus_cmd->cmd_ext.regaddr = 0x0000;
 		sh->modbus_cmd->cmd_ext.regcount = 0x0002;
-		sh->modbus_cmd->cmd_ext.crcl = 0x00;
-		sh->modbus_cmd->cmd_ext.crch = 0x00;
+		mb_crc = crc16_calc(sh->modbus_cmd->cmdbytes, sh->mb_cmdsize - 2);
+		sh->modbus_cmd->cmd.crcl = (uint8_t)mb_crc;
+		sh->modbus_cmd->cmd.crch = (uint8_t)(mb_crc >> 8);
 		sh->mb_respsize = sizeof(ModBus_Resp_CS_t);
 	}
 }
