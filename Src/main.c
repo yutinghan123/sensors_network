@@ -147,6 +147,7 @@ int main(void)
 	RS485_RX_EN();
 	Que_Init(&qbuf1);
 	Que_Init(&qbuf2);
+	Sensors_Que_Init(&sens_que);
   /* USER CODE BEGIN 2 */
 	printf("Main Board Ready!\r\n");
 	if(HAL_UART_Receive_IT(&huart1, (uint8_t*)aRx1Buffer, 1)!= HAL_OK)
@@ -272,7 +273,7 @@ static void MX_USART2_UART_Init(void)
 
   /* USER CODE END USART2_Init 1 */
   huart2.Instance = USART2;
-  huart2.Init.BaudRate = 115200;
+  huart2.Init.BaudRate = 9600;
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
   huart2.Init.StopBits = UART_STOPBITS_1;
   huart2.Init.Parity = UART_PARITY_NONE;

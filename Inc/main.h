@@ -48,7 +48,8 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f1xx_hal.h"
+#include <stdlib.h>
+	#include "stm32f1xx_hal.h"
 #include "comm_def.h"
 #include "uds.h"
 #include "sensor.h"
