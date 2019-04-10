@@ -47,6 +47,7 @@
 extern "C" {
 #endif
 
+#define DEBUG_ON 1 //²âÊÔ´úÂë±àÒë¿ª¹Ø
 /* Includes ------------------------------------------------------------------*/
 #include <stdlib.h>
 	#include "stm32f1xx_hal.h"

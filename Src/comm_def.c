@@ -16,3 +16,13 @@ uint16_t crc16_calc(uint8_t * pchMsg, uint16_t wDataLen)
   }
   return wCRC;
 }
+/*16位无符号整数小端模式转换为大端模式*/
+uint16_t l2b16(uint16_t var)
+{
+	uint8_t *p, t;
+	p = (uint8_t *)&var;
+	t = *p;
+	*p = *(p + 1);
+	*(p + 1) = t;
+	return var;
+}
