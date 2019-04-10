@@ -7,6 +7,7 @@ MDK-ARM/*.*
 !MDK-ARM/sensor_network.uvoptx
 !MDK-ARM/sensor_network.uvprojx
 !MDK-ARM/startup_stm32f103xe.s
+Model/
 
 # Temporary files
 textbuf.txt

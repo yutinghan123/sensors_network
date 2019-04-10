@@ -92,6 +92,13 @@ uint32_t rx1_lastbyte_time = 0;//´®¿ÚÊÕµ½×Ö·ûºó·¢ËÍµÈ´ýÊ±¼ä£¨µÈ½ÓÊÕ»º³åÇø½ÓÊÕÒ»µ
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
+#ifdef __GNUC__
+/* With GCC, small printf (option LD Linker->Libraries->Small printf
+   set to 'Yes') calls __io_putchar() */
+#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+#else
+#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+#endif /* __GNUC__ */
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART1_UART_Init(void);
@@ -141,10 +148,7 @@ int main(void)
 	Que_Init(&qbuf1);
 	Que_Init(&qbuf2);
   /* USER CODE BEGIN 2 */
-	if(HAL_UART_Transmit_IT(&huart1, (uint8_t*)"Board Ready!\r\n", 14)!= HAL_OK)
-  {
-    Error_Handler();
-  }  
+	printf("Main Board Ready!\r\n");
 	if(HAL_UART_Receive_IT(&huart1, (uint8_t*)aRx1Buffer, 1)!= HAL_OK)
   {
     Error_Handler();
@@ -399,6 +403,19 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *UartHandle)
 }
 
 
+/**
+  * @brief  Retargets the C library printf function to the USART.
+  * @param  None
+  * @retval None
+  */
+PUTCHAR_PROTOTYPE
+{
+  /* Place your implementation of fputc here */
+  /* e.g. write a character to the USART1 and Loop until the end of transmission */
+  HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xFFFF);
+
+  return ch;
+}
 /* USER CODE END 4 */
 
 /**
