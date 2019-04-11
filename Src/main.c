@@ -40,8 +40,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#define RS485_RX_EN() HAL_GPIO_WritePin(GPIOD, GPIO_PIN_7, GPIO_PIN_RESET)
-#define RS485_TX_EN() HAL_GPIO_WritePin(GPIOD, GPIO_PIN_7, GPIO_PIN_SET)
 #define TXBUFFERSIZE 1
 #define RXBUFFERSIZE TXBUFFERSIZE
 #define RUNNING_BLINK_INTERVAL 500 //ms 状态指示灯状态变化间隔时间
@@ -121,7 +119,6 @@ int main(void)
 	
   /* USER CODE BEGIN 1 */
 	uint8_t b;
-	FunctionalState rs485_tx = DISABLE;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -176,9 +173,12 @@ int main(void)
 		}
 		if ((HAL_GetTick() - lastptime + 0x100000000) % 0x100000000 >= POLLING_PERIOD * 1000)
 		{
+			printf("polling start...\r\n");
+			lastptime = HAL_GetTick();
 			LED0_ON();
 			Sensors_Polling(&sens_que);
 			LED0_OFF();
+			printf("polling end...\r\n");
 		}
 		if ( (curtick = HAL_GetTick()) - lasttick >= RUNNING_BLINK_INTERVAL) 
 		{
@@ -240,7 +240,7 @@ static void MX_USART1_UART_Init(void)
 
   /* USER CODE END USART1_Init 1 */
   huart1.Instance = USART1;
-  huart1.Init.BaudRate = 115200;
+  huart1.Init.BaudRate = 9600;
   huart1.Init.WordLength = UART_WORDLENGTH_8B;
   huart1.Init.StopBits = UART_STOPBITS_1;
   huart1.Init.Parity = UART_PARITY_NONE;
@@ -307,12 +307,13 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOE, GPIO_PIN_5, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOD, GPIO_PIN_7, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5|GPIO_PIN_8, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : PE2 PE3 PE4 */
   GPIO_InitStruct.Pin = GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_4;

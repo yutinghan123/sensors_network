@@ -48,9 +48,12 @@ extern "C" {
 #endif
 
 #define DEBUG_ON 1 //²âÊÔ´úÂë±àÒë¿ª¹Ø
+#define RS485_RX_EN() HAL_GPIO_WritePin(GPIOD, GPIO_PIN_7, GPIO_PIN_RESET)
+#define RS485_TX_EN() HAL_GPIO_WritePin(GPIOD, GPIO_PIN_7, GPIO_PIN_SET)
+
 /* Includes ------------------------------------------------------------------*/
 #include <stdlib.h>
-	#include "stm32f1xx_hal.h"
+#include "stm32f1xx_hal.h"
 #include "comm_def.h"
 #include "uds.h"
 #include "sensor.h"
@@ -62,6 +65,8 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
+extern UART_HandleTypeDef huart1;
+extern UART_HandleTypeDef huart2;
 
 /* USER CODE END ET */
 

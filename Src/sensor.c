@@ -3,12 +3,21 @@ const char * SENS_TYPE_STR[] = {"SEN_TEMP_HUMI", "SEN_ILLUM_T_H", "SEN_CO2_T_H",
 /*发送传感器Modbus命令*/
 BOOL_t Modbus_Send_Cmd(Sensor_Handle_t * hs)
 {
-	return TRUE;
+	RS485_TX_EN();
+	if (HAL_UART_Transmit(&huart2, hs->modbus_cmd->cmdbytes, hs->mb_cmdsize, MODBUS_CMD_TIMEOUT)) {
+		RS485_RX_EN();
+		return TRUE;
+	}
+	RS485_RX_EN();
+	return FALSE;
 }
 /*接收传感器Modbus响应*/
 BOOL_t Modbus_Receive_Resp(Sensor_Handle_t * hs)
 {	
-	return TRUE;
+	if (HAL_UART_Receive(&huart2, hs->modbus_resp->respbytes, hs->mb_respsize, MODBUS_RESP_TIMEOUT)) {
+		return TRUE;
+	}
+	return FALSE;
 }
 
 //
@@ -31,10 +40,12 @@ void Sensors_Polling(PtrQue_TypeDef * sq)
 	{
 		if (PtrQue_Query(sq, (void **)&hs))
 		{
-			Modbus_Send_Cmd(hs);
-			HAL_Delay(MODBUS_TIMEOUT);
-			if (Modbus_Receive_Resp(hs)) {
-				
+			if (Modbus_Send_Cmd(hs)) {
+				if (Modbus_Receive_Resp(hs)) {
+#if (DEBUG_ON == 1)
+					Sensor_Data_Print(hs);
+#endif
+				}
 			}
 		}
 	}
@@ -151,4 +162,8 @@ void Sensors_Que_Init(PtrQue_TypeDef * sq)
 #if (DEBUG_ON == 1)
 	Sensors_Que_Print(sq);
 #endif
+}
+
+void Sensor_Data_Print(Sensor_Handle_t * hs)
+{
 }

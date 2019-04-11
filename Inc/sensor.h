@@ -1,6 +1,7 @@
 #ifndef __SENSOR_H
 #define __SENSOR_H
-#define MODBUS_TIMEOUT 100 //ModBus等待响应超时时间（ms），即发出ModBus命令后，等待接收方响应的时间，超出此时间认为失去响应
+#define MODBUS_CMD_TIMEOUT 15  //ModBus命令发送超时时间（ms），超出此时间命令未发出认为发送失败
+#define MODBUS_RESP_TIMEOUT 100 //ModBus等待响应超时时间（ms），即发出ModBus命令后，等待接收方响应的时间，超出此时间认为失去响应
 #define POLLING_PERIOD 10		//巡检周期（s）
 extern const char * SENS_TYPE_STR[];
 typedef enum
@@ -97,4 +98,6 @@ BOOL_t Sens_Data_Proc(Sensor_Handle_t * hs);
 void Sensors_Polling(PtrQue_TypeDef * pq);
 /*传感器队列初始化*/
 void Sensors_Que_Init(PtrQue_TypeDef * sq);
+/*通过串口打印传感器数据*/
+void Sensor_Data_Print(Sensor_Handle_t * hs);
 #endif
