@@ -15,8 +15,10 @@ BOOL_t Modbus_Send_Cmd(Sensor_Handle_t * hs)
 BOOL_t Modbus_Receive_Resp(Sensor_Handle_t * hs)
 {	
 	if (HAL_UART_Receive(&huart2, hs->modbus_resp->respbytes, hs->mb_respsize, MODBUS_RESP_TIMEOUT)) {
+		hs->mb_resp_new = TRUE;
 		return TRUE;
 	}
+	hs->mb_resp_new = FALSE;
 	return FALSE;
 }
 
@@ -41,8 +43,7 @@ void Sensors_Polling(PtrQue_TypeDef * sq)
 		if (PtrQue_Query(sq, (void **)&hs))
 		{
 			if (Modbus_Send_Cmd(hs)) {
-				if (Modbus_Receive_Resp(hs)) {
-				}
+				Modbus_Receive_Resp(hs);
 			}
 		}
 	}
@@ -156,7 +157,7 @@ void Sensors_Que_Init(PtrQue_TypeDef * sq)
 		sh->modbus_cmd->cmd_ext.crc16 = crc16_calc(sh->modbus_cmd->cmdbytes, sh->mb_cmdsize - 2);
 		sh->mb_respsize = sizeof(ModBus_Resp_CS_t);
 	}
-#if (DEBUG_ON == 1)
-	Sensors_Que_Print(sq);
-#endif
+//#if (DEBUG_ON == 1)
+//	Sensors_Que_Print(sq);
+//#endif
 }
