@@ -26,3 +26,15 @@ uint16_t l2b16(uint16_t var)
 	*(p + 1) = t;
 	return var;
 }
+/*字节顺序反转，用于大端/小端存储格式的相互转换*/
+void rbytes(uint8_t b[], uint8_t len)
+{
+	uint8_t i;
+	uint8_t t;
+	for (i = 0; i < len / 2; i++)
+	{
+		t = b[i];
+		b[i] = b[len -1 - i];
+		b[len -1 - i] = t;
+	}
+}
