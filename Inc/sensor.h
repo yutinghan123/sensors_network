@@ -99,6 +99,4 @@ BOOL_t Sens_Data_Proc(Sensor_Handle_t * hs);
 void Sensors_Polling(PtrQue_TypeDef * pq);
 /*传感器队列初始化*/
 void Sensors_Que_Init(PtrQue_TypeDef * sq);
-/*通过串口打印传感器数据*/
-void Sensor_Data_Print(Sensor_Handle_t * hs);
 #endif

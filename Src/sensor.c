@@ -42,9 +42,6 @@ void Sensors_Polling(PtrQue_TypeDef * sq)
 		{
 			if (Modbus_Send_Cmd(hs)) {
 				if (Modbus_Receive_Resp(hs)) {
-#if (DEBUG_ON == 1)
-					Sensor_Data_Print(hs);
-#endif
 				}
 			}
 		}
@@ -162,8 +159,4 @@ void Sensors_Que_Init(PtrQue_TypeDef * sq)
 #if (DEBUG_ON == 1)
 	Sensors_Que_Print(sq);
 #endif
-}
-
-void Sensor_Data_Print(Sensor_Handle_t * hs)
-{
 }
