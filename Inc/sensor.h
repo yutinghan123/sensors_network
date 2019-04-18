@@ -87,6 +87,7 @@ __packed typedef struct
 	uint8_t mb_cmdsize;	//modbus命令长度
 	ModBus_Resp_Union_t * modbus_resp;//modbus响应数据指针
 	uint8_t mb_respsize;	//modbus响应数据长度
+	BOOL_t mb_resp_new;
 }Sensor_Handle_t;
 /*发送传感器Modbus命令*/
 BOOL_t Modbus_Send_Cmd(Sensor_Handle_t * hs);
