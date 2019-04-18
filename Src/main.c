@@ -41,8 +41,14 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "uds.h"
+#define OLD_BOARD 0 //新旧版本的开发板编译选项
+#if (OLD_BOARD == 1)
+#define RS485_RX_EN() HAL_GPIO_WritePin(GPIOG, GPIO_PIN_9, GPIO_PIN_RESET)
+#define RS485_TX_EN() HAL_GPIO_WritePin(GPIOG, GPIO_PIN_9, GPIO_PIN_SET)
+#else
 #define RS485_RX_EN() HAL_GPIO_WritePin(GPIOD, GPIO_PIN_7, GPIO_PIN_RESET)
 #define RS485_TX_EN() HAL_GPIO_WritePin(GPIOD, GPIO_PIN_7, GPIO_PIN_SET)
+#endif
 #define TXBUFFERSIZE 1
 #define RXBUFFERSIZE TXBUFFERSIZE
 #define RUNNING_BLINK_INTERVAL 500 //ms 状态指示灯状态变化间隔时间
@@ -303,7 +309,7 @@ static void MX_USART2_UART_Init(void)
 
   /* USER CODE END USART2_Init 1 */
   huart2.Instance = USART2;
-  huart2.Init.BaudRate = 9600
+  huart2.Init.BaudRate = 9600;
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
   huart2.Init.StopBits = UART_STOPBITS_1;
   huart2.Init.Parity = UART_PARITY_NONE;
@@ -332,14 +338,22 @@ static void MX_GPIO_Init(void)
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOE_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
+#if (OLD_BOARD == 1)
+	__HAL_RCC_GPIOG_CLK_ENABLE();
+#else
   __HAL_RCC_GPIOD_CLK_ENABLE();
+#endif
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOE, GPIO_PIN_5, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
+#if (OLD_BOARD == 1)
+  HAL_GPIO_WritePin(GPIOG, GPIO_PIN_9, GPIO_PIN_RESET);
+#else
   HAL_GPIO_WritePin(GPIOD, GPIO_PIN_7, GPIO_PIN_RESET);
+#endif
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5|GPIO_PIN_8, GPIO_PIN_RESET);
@@ -363,12 +377,17 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PD7 */
-  GPIO_InitStruct.Pin = GPIO_PIN_7;
+  /*Configure GPIO pin : PD7 / PG9 */
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+#if (OLD_BOARD == 1)
+  GPIO_InitStruct.Pin = GPIO_PIN_9;
+  HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
+#else
+  GPIO_InitStruct.Pin = GPIO_PIN_7;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+#endif
 
   /*Configure GPIO pins : PB5 PB8 */
   GPIO_InitStruct.Pin = GPIO_PIN_5|GPIO_PIN_8;
