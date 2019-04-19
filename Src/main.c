@@ -146,7 +146,7 @@ int main(void)
 	Que_Init(&qbuf2);
 	Sensors_Que_Init(&sens_que);
   /* USER CODE BEGIN 2 */
-	printf("Main Board Ready!\r\n");
+	printf("Senor Networks Controller Ready!\r\n");
 	if(HAL_UART_Receive_IT(&huart1, (uint8_t*)aRx1Buffer, 1)!= HAL_OK)
   {
     Error_Handler();
