@@ -100,4 +100,6 @@ void Sensors_Polling(PtrQue_TypeDef * sq);
 void Sens_Data_Proc(PtrQue_TypeDef * sq);
 /*传感器队列初始化*/
 void Sensors_Que_Init(PtrQue_TypeDef * sq);
+/*打印传感器队列*/
+void Sensors_Que_Print(PtrQue_TypeDef * sq);
 #endif
