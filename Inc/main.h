@@ -58,6 +58,7 @@ extern "C" {
 #endif
 /* Includes ------------------------------------------------------------------*/
 #include <stdlib.h>
+#include <string.h>
 #include "stm32f1xx_hal.h"
 #include "comm_def.h"
 #include "uds.h"

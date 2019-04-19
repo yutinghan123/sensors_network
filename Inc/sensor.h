@@ -2,7 +2,8 @@
 #define __SENSOR_H
 #define MODBUS_CMD_TIMEOUT 15  //ModBus命令发送超时时间（ms），超出此时间命令未发出认为发送失败
 #define MODBUS_RESP_TIMEOUT 100 //ModBus等待响应超时时间（ms），即发出ModBus命令后，等待接收方响应的时间，超出此时间认为失去响应
-#define POLLING_PERIOD 10		//巡检周期（s）
+#define POLLING_PERIOD 60		//巡检周期（s）
+#define SENS_SIM 1					//传感器数据仿真，如果为1，则不会接收真实的传感器数据，直接填写一个预设的数据到modbus响应数据缓冲区
 extern const char * SENS_TYPE_STR[];
 typedef enum
 {

@@ -1,5 +1,11 @@
 #include "main.h"
 const char * SENS_TYPE_STR[] = {"SEN_TEMP_HUMI", "SEN_ILLUM_T_H", "SEN_CO2_T_H", "SEN_COND_SALT"};
+const uint8_t SENS_RESP_SAMPLE[6][13] = {{0x01,0x03,0x08,0x02,0x89,0x00,0xF6,0x00,0x00,0x00,0x00,0xC4,0xD3},\
+																			{0x02,0x03,0x06,0x02,0x4F,0x01,0x1C,0x02,0xB2,0x20,0x86},\
+																			{0x03,0x03,0x04,0x00,0x00,0x00,0xEE,0x59,0xBF},\
+																			{0x04,0x03,0x04,0x00,0x00,0x00,0xEF,0xEE,0xBF},\
+																			{0x05,0x03,0x04,0x00,0x07,0x00,0xF3,0x4E,0x77},\
+																			{0x0A,0x01,0x04,0x00,0x00,0x00,0x00,0x41,0x11}};
 /*发送传感器Modbus命令*/
 BOOL_t Modbus_Send_Cmd(Sensor_Handle_t * hs)
 {
@@ -13,13 +19,19 @@ BOOL_t Modbus_Send_Cmd(Sensor_Handle_t * hs)
 }
 /*接收传感器Modbus响应*/
 BOOL_t Modbus_Receive_Resp(Sensor_Handle_t * hs)
-{	
+{
+#if (SENS_SIM == 1)
+	memcpy((void *)(hs->modbus_resp->respbytes), (const void *)(SENS_RESP_SAMPLE[hs->type]), (unsigned int)hs->mb_respsize);
+	hs->mb_resp_new = TRUE;
+	return TRUE;
+#else
 	if (HAL_UART_Receive(&huart2, hs->modbus_resp->respbytes, hs->mb_respsize, MODBUS_RESP_TIMEOUT)) {
 		hs->mb_resp_new = TRUE;
 		return TRUE;
 	}
 	hs->mb_resp_new = FALSE;
 	return FALSE;
+#endif
 }
 
 //传感器数据解析
