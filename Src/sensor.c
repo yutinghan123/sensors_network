@@ -69,10 +69,18 @@ BOOL_t Modbus_Data_Proc(Sensor_Handle_t * hs, void * result)
 	return TRUE;
 }
 
-/*解析传感器数据，以指针形式返回解析结果*/
-BOOL_t Sens_Data_Proc(Sensor_Handle_t * hs)
+/*解析巡检后的传感器数据*/
+void Sens_Data_Proc(PtrQue_TypeDef * sq)
 {
-	return TRUE;
+	int i;
+	Sensor_Handle_t * hs;
+	for (i = 0; i < __PTRQUE_COUNT(sq); i++)
+	{
+		if (PtrQue_Query(sq, (void **)&hs))
+		{
+			Modbus_Data_Proc(hs, NULL);
+		}
+	}
 }
 
 void Sensors_Polling(PtrQue_TypeDef * sq)

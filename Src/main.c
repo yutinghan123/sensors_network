@@ -179,6 +179,7 @@ int main(void)
 			Sensors_Polling(&sens_que);
 			LED0_OFF();
 			printf("polling end...\r\n");
+			Sens_Data_Proc(&sens_que);
 		}
 		if ( (curtick = HAL_GetTick()) - lasttick >= RUNNING_BLINK_INTERVAL) 
 		{

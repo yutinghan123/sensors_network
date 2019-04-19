@@ -94,10 +94,10 @@ __packed typedef struct
 BOOL_t Modbus_Send_Cmd(Sensor_Handle_t * hs);
 /*接收传感器Modbus响应*/
 BOOL_t Modbus_Receive_Resp(Sensor_Handle_t * hs);
-/*解析传感器数据*/
-BOOL_t Sens_Data_Proc(Sensor_Handle_t * hs);
 /*传感器巡检*/
-void Sensors_Polling(PtrQue_TypeDef * pq);
+void Sensors_Polling(PtrQue_TypeDef * sq);
+/*解析巡检后的传感器数据*/
+void Sens_Data_Proc(PtrQue_TypeDef * sq);
 /*传感器队列初始化*/
 void Sensors_Que_Init(PtrQue_TypeDef * sq);
 #endif
