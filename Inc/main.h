@@ -64,6 +64,7 @@ extern "C" {
 #include "uds.h"
 #include "sensor.h"
 #include "led.h"
+#include "switch.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 

@@ -420,6 +420,11 @@
               <FileType>1</FileType>
               <FilePath>..\Src\comm_def.c</FilePath>
             </File>
+            <File>
+              <FileName>switch.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\switch.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -509,6 +514,11 @@
               <FileName>README.md</FileName>
               <FileType>5</FileType>
               <FilePath>..\README.md</FilePath>
+            </File>
+            <File>
+              <FileName>textbuf.txt</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\textbuf.txt</FilePath>
             </File>
           </Files>
         </Group>
