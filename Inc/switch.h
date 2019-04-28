@@ -29,20 +29,20 @@ typedef struct
 	CommandResType_t result;	//命令执行结果
 	SwActType_t status;				//状态
 	BOOL_t				command_new;//新命令标志
+	char *				cmdbuf;			//命令缓冲区
+	uint8_t				cmdsize;		//命令缓冲区大小
 	GPIO_TypeDef *k1_port;
 	uint16_t			k1_pin;
 	GPIO_TypeDef *k2_port;
 	uint16_t			k2_pin;
-	char *				cmdbuf;			//命令缓冲区
-	uint8_t				cmdsize;		//命令缓冲区大小
 }SW_Handle_t;//开关句柄
 /*执行控制器命令*/
-BOOL_t Cmd_Exec(PtrQue_TypeDef * cq);
+BOOL_t SW_Cmd_Exec(PtrQue_TypeDef * swq);
 /*命令队列初始化*/
-void Command_Que_Init(PtrQue_TypeDef * cq);
+void SW_Que_Init(PtrQue_TypeDef * swq);
 /*控制开关动作*/
 void SW_Control(SW_Handle_t * sw);
-void SW_OFF(SW_Handle_t * sw);
-void SW_ON(SW_Handle_t * sw);
-void SW_STOP(SW_Handle_t * sw);
+CommandResType_t SW_OFF(SW_Handle_t * sw);
+CommandResType_t SW_ON(SW_Handle_t * sw);
+CommandResType_t SW_STOP(SW_Handle_t * sw);
 #endif
